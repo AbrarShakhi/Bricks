@@ -1,0 +1,24 @@
+<resources>
+    <string name="ui_menu_app_info">App info</string>
+    <string name="ui_menu_uninstall">Uninstall</string>
+    <string name="ui_menu_hide">Hide app</string>
+    <string name="ui_menu_unhide">Show in drawer</string>
+    <string name="ui_menu_rename">Rename</string>
+    <string name="ui_menu_add_home">Add to home</string>
+    <string name="ui_menu_add_dock">Add to dock</string>
+    <string name="ui_menu_remove">Remove</string>
+    <string name="ui_menu_pin_shortcut">Pin to home</string>
+    <string name="ui_menu_store">View in store</string>
+    <string name="ui_action_cancel">Cancel</string>
+    <string name="ui_action_save">Save</string>
+    <string name="ui_action_done">Done</string>
+    <string name="ui_rename_app_title">Rename app</string>
+    <string name="ui_rename_app_hint">App name</string>
+    <string name="ui_rename_reset">Original name</string>
+    <string name="ui_widget_unavailable">Widget unavailable</string>
+    <string name="ui_label_work">Work</string>
+    <string name="ui_label_paused">Paused</string>
+    <string name="ui_state_on">On</string>
+    <string name="ui_state_off">Off</string>
+    <string name="ui_unread_notifications">%1$d unread notifications</string>
+</resources>
