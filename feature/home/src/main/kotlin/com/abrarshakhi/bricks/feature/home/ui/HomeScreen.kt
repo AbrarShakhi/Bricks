@@ -41,8 +41,12 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -540,6 +544,7 @@ private fun HomePageGrid(
                             onIntent = onIntent,
                             modifier = Modifier
                                 .cell(CellPosition(placement.cell.x, placement.cell.y, placement.span.width, placement.span.height))
+                                .mergeHighlight(merging, inset = -MERGE_OUTSET)
                                 .graphicsLayer {
                                     scaleX = scale
                                     scaleY = scale
@@ -594,6 +599,7 @@ private fun Dock(
                             menu = state.menu,
                             onIntent = onIntent,
                             modifier = (if (vertical) Modifier.height(slot).fillMaxWidth() else Modifier.width(slot).fillMaxHeight())
+                                .mergeHighlight(merging, inset = MERGE_INSET)
                                 .graphicsLayer {
                                     scaleX = scale
                                     scaleY = scale
@@ -635,6 +641,25 @@ private fun Dock(
                     }.background(PuiTheme.colors.primary, PuiTheme.shapes.pill),
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun Modifier.mergeHighlight(active: Boolean, inset: Dp): Modifier {
+    val fill = PuiTheme.colors.primary.copy(alpha = 0.45f)
+    val ink = PuiTheme.colors.ink
+    return if (!active) {
+        this
+    } else {
+        drawBehind {
+            val edge = inset.toPx()
+            val stroke = MERGE_STROKE.toPx()
+            val topLeft = Offset(edge, edge)
+            val area = Size(size.width - edge * 2f, size.height - edge * 2f)
+            val corner = CornerRadius(MERGE_CORNER.toPx())
+            drawRoundRect(color = fill, topLeft = topLeft, size = area, cornerRadius = corner)
+            drawRoundRect(color = ink, topLeft = topLeft, size = area, cornerRadius = corner, style = Stroke(stroke))
         }
     }
 }
@@ -706,3 +731,7 @@ private val SWIPE_DOWN_THRESHOLD = 56.dp
 private const val FLING_DOWN_VELOCITY = 1500f
 private val DOCK_PADDING = 10.dp
 private val MARKER_THICKNESS = 4.dp
+private val MERGE_INSET = 4.dp
+private val MERGE_OUTSET = 8.dp
+private val MERGE_STROKE = 3.dp
+private val MERGE_CORNER = 18.dp
