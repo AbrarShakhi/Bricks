@@ -22,6 +22,9 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -33,6 +36,7 @@ dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.androidx.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    testImplementation(testFixtures(project(":core:domain")))
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
