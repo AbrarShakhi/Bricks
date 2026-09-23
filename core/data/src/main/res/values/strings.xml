@@ -1,0 +1,5 @@
+<resources>
+    <string name="data_badge_service_label">Bricks notification dots</string>
+    <string name="data_accessibility_service_label">Bricks screen lock</string>
+    <string name="data_accessibility_service_description">Lets Bricks lock the screen when you double-tap an empty spot on the home screen, and open the notification shade with a swipe down. Bricks does not read or collect anything shown on screen.</string>
+</resources>
