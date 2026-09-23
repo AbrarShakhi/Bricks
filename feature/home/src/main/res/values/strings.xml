@@ -1,0 +1,42 @@
+<resources>
+    <string name="home_search_hint">Search apps</string>
+    <string name="home_menu_edit">Edit home screen</string>
+    <string name="home_menu_widgets">Widgets</string>
+    <string name="home_menu_wallpaper">Wallpapers</string>
+    <string name="home_menu_settings">Launcher settings</string>
+    <string name="home_menu_resize">Resize</string>
+    <string name="home_menu_reconfigure">Widget settings</string>
+    <string name="home_folder_default">Folder</string>
+    <string name="home_folder_rename_title">Name this folder</string>
+    <string name="home_drop_remove">Remove</string>
+    <string name="home_drop_uninstall">Uninstall</string>
+    <string name="home_edit_title">Edit home</string>
+    <string name="home_edit_add_page">Add page</string>
+    <string name="home_edit_remove_page">Remove page</string>
+    <string name="home_remove_page_title">Remove this page?</string>
+    <string name="home_remove_page_message">Everything on this page will be removed from your home screen. Your apps stay installed.</string>
+    <string name="home_remove_page_confirm">Remove page</string>
+    <string name="home_resize_title">Resize widget</string>
+    <string name="home_resize_width">Width</string>
+    <string name="home_resize_height">Height</string>
+    <string name="home_default_title">Make Bricks your home</string>
+    <string name="home_default_message">Set Bricks as your default home app to unlock app shortcuts, work apps and the home button.</string>
+    <string name="home_default_action">Set as default</string>
+    <string name="home_default_later">Later</string>
+    <string name="home_msg_launch_failed">Couldn\'t open that app</string>
+    <string name="home_msg_dock_full">The dock is full</string>
+    <string name="home_msg_no_room">Not enough room for that size</string>
+    <string name="home_msg_lock_setup">Turn on Bricks screen lock in Accessibility to use this gesture</string>
+    <string name="home_msg_lock_setup_action">Set up</string>
+    <string name="home_msg_gesture_unavailable">That gesture isn\'t available on this device</string>
+    <string name="home_msg_app_hidden">App hidden from the drawer</string>
+    <string name="home_msg_cannot_uninstall">System apps can\'t be uninstalled</string>
+    <string name="home_glance_battery">%1$d%%</string>
+    <string name="home_a11y_open_clock">Open clock</string>
+    <string name="home_a11y_page">Page %1$d of %2$d</string>
+    <string name="home_a11y_widget">Widget</string>
+    <plurals name="home_a11y_folder">
+        <item quantity="one">Folder %1$s, %2$d app</item>
+        <item quantity="other">Folder %1$s, %2$d apps</item>
+    </plurals>
+</resources>
