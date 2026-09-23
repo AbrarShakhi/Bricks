@@ -1,0 +1,16 @@
+<resources>
+    <string name="widgets_title">Widgets</string>
+    <string name="widgets_back">Back</string>
+    <string name="widgets_search_hint">Search widgets</string>
+    <string name="widgets_hint">Tap a widget to stamp it onto your home screen. Long-press it there to resize or remove it.</string>
+    <string name="widgets_empty_title">No widgets found</string>
+    <string name="widgets_empty_message">Apps you install can add widgets here.</string>
+    <string name="widgets_span">%1$d × %2$d</string>
+    <string name="widgets_work">Work profile</string>
+    <string name="widgets_msg_failed">That widget couldn\'t be added</string>
+    <string name="widgets_msg_cancelled">Widget not added</string>
+    <plurals name="widgets_count">
+        <item quantity="one">%1$d widget</item>
+        <item quantity="other">%1$d widgets</item>
+    </plurals>
+</resources>
