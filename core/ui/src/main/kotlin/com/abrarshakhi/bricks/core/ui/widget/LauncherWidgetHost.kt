@@ -15,7 +15,7 @@ import com.abrarshakhi.bricks.core.domain.model.WidgetProviderKey
 class LauncherWidgetHost(
     context: Context,
     private val userManager: UserManager,
-) {
+) : WidgetBinder {
     private val appContext = context.applicationContext
     private val manager: AppWidgetManager = AppWidgetManager.getInstance(appContext)
     private var listening = false
@@ -39,22 +39,22 @@ class LauncherWidgetHost(
         listening = false
     }
 
-    fun allocateId(): Int = host.allocateAppWidgetId()
+    override fun allocateId(): Int = host.allocateAppWidgetId()
 
-    fun deleteId(appWidgetId: Int) {
+    override fun deleteId(appWidgetId: Int) {
         runCatching { host.deleteAppWidgetId(appWidgetId) }
     }
 
-    fun allocatedIds(): Set<Int> = runCatching { host.appWidgetIds.toSet() }.getOrDefault(emptySet())
+    override fun allocatedIds(): Set<Int> = runCatching { host.appWidgetIds.toSet() }.getOrDefault(emptySet())
 
-    fun bindIfAllowed(appWidgetId: Int, provider: WidgetProviderKey): Boolean {
+    override fun bindIfAllowed(appWidgetId: Int, provider: WidgetProviderKey): Boolean {
         val user = runCatching { userManager.getUserForSerialNumber(provider.userSerial) }.getOrNull() ?: return false
         return runCatching {
             manager.bindAppWidgetIdIfAllowed(appWidgetId, user, provider.component(), null)
         }.getOrDefault(false)
     }
 
-    fun bindPermissionIntent(appWidgetId: Int, provider: WidgetProviderKey): Intent? {
+    override fun bindPermissionIntent(appWidgetId: Int, provider: WidgetProviderKey): Intent? {
         val user = runCatching { userManager.getUserForSerialNumber(provider.userSerial) }.getOrNull() ?: return null
         return Intent(AppWidgetManager.ACTION_APPWIDGET_BIND)
             .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -64,7 +64,7 @@ class LauncherWidgetHost(
 
     fun info(appWidgetId: Int): AppWidgetProviderInfo? = runCatching { manager.getAppWidgetInfo(appWidgetId) }.getOrNull()
 
-    fun needsConfiguration(appWidgetId: Int): Boolean {
+    override fun needsConfiguration(appWidgetId: Int): Boolean {
         val info = info(appWidgetId) ?: return false
         if (info.configure == null) return false
         val optional = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&

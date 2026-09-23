@@ -12,7 +12,7 @@ import com.abrarshakhi.bricks.core.domain.usecase.system.ObserveWidgetProvidersU
 import com.abrarshakhi.bricks.core.domain.usecase.system.WidgetProviderGroup
 import com.abrarshakhi.bricks.core.ui.mvi.MviViewModel
 import com.abrarshakhi.bricks.core.ui.widget.ActivityResultBridge
-import com.abrarshakhi.bricks.core.ui.widget.LauncherWidgetHost
+import com.abrarshakhi.bricks.core.ui.widget.WidgetBinder
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ class WidgetsViewModel(
     observeProviders: ObserveWidgetProvidersUseCase,
     observeSettings: ObserveSettingsUseCase,
     private val addWidgetToHome: AddWidgetToHomeUseCase,
-    private val widgetHost: LauncherWidgetHost,
+    private val widgetHost: WidgetBinder,
     resultBridge: ActivityResultBridge,
 ) : MviViewModel<WidgetsState, WidgetsIntent, WidgetsEffect>(WidgetsState()) {
 

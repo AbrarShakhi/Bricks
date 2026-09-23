@@ -8,7 +8,7 @@ import com.abrarshakhi.bricks.core.domain.usecase.home.FindWidgetProviderUseCase
 import com.abrarshakhi.bricks.core.domain.usecase.home.PinShortcutToHomeUseCase
 import com.abrarshakhi.bricks.core.domain.usecase.settings.ObserveSettingsUseCase
 import com.abrarshakhi.bricks.core.ui.mvi.MviViewModel
-import com.abrarshakhi.bricks.core.ui.widget.LauncherWidgetHost
+import com.abrarshakhi.bricks.core.ui.widget.WidgetBinder
 import kotlinx.coroutines.launch
 
 class PinItemViewModel(
@@ -17,7 +17,7 @@ class PinItemViewModel(
     private val findWidgetProvider: FindWidgetProviderUseCase,
     private val pinShortcut: PinShortcutToHomeUseCase,
     private val addWidgetToHome: AddWidgetToHomeUseCase,
-    private val widgetHost: LauncherWidgetHost,
+    private val widgetHost: WidgetBinder,
 ) : MviViewModel<PinItemState, PinItemIntent, PinItemEffect>(PinItemState(candidate = request.candidate)) {
 
     private var pending: PendingWidget? = null

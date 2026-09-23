@@ -5,13 +5,15 @@ import com.abrarshakhi.bricks.core.ui.util.HomeButtonEvents
 import com.abrarshakhi.bricks.core.ui.util.HomeGridMetrics
 import com.abrarshakhi.bricks.core.ui.widget.ActivityResultBridge
 import com.abrarshakhi.bricks.core.ui.widget.LauncherWidgetHost
+import com.abrarshakhi.bricks.core.ui.widget.WidgetBinder
 import com.abrarshakhi.bricks.core.ui.widget.WidgetPreviewLoader
 import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val uiModule = module {
     single { AppIconLoader(androidContext(), get(), get()) }
-    single { LauncherWidgetHost(androidContext(), get()) }
+    single { LauncherWidgetHost(androidContext(), get()) } bind WidgetBinder::class
     single { WidgetPreviewLoader(androidContext(), get()) }
     single { ActivityResultBridge() }
     single { HomeButtonEvents() }

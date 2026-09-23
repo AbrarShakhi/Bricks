@@ -15,7 +15,7 @@ import com.abrarshakhi.bricks.core.domain.model.ProfileType
 import com.abrarshakhi.bricks.core.domain.usecase.system.GestureOutcome
 import com.abrarshakhi.bricks.core.ui.mvi.MviViewModel
 import com.abrarshakhi.bricks.core.ui.util.HomeGridMetrics
-import com.abrarshakhi.bricks.core.ui.widget.LauncherWidgetHost
+import com.abrarshakhi.bricks.core.ui.widget.WidgetBinder
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ class HomeViewModel(
     private val appActions: HomeAppActions,
     private val layoutActions: HomeLayoutActions,
     private val system: HomeSystemActions,
-    private val widgetHost: LauncherWidgetHost,
+    private val widgetHost: WidgetBinder,
     private val gridMetrics: HomeGridMetrics,
 ) : MviViewModel<HomeState, HomeIntent, HomeEffect>(HomeState()) {
 
