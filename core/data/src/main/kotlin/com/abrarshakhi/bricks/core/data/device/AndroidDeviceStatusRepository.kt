@@ -7,9 +7,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import androidx.core.content.ContextCompat
+import com.abrarshakhi.bricks.core.data.ApplicationScope
 import com.abrarshakhi.bricks.core.domain.model.BatteryStatus
 import com.abrarshakhi.bricks.core.domain.repository.DeviceStatusRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.shareIn
 
 internal class AndroidDeviceStatusRepository(
     private val context: Context,
-    appScope: CoroutineScope,
+    appScope: ApplicationScope,
 ) : DeviceStatusRepository {
 
     override val clock: Flow<Long> = broadcasts(

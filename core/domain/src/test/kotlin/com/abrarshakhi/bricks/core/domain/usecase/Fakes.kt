@@ -121,6 +121,9 @@ class FakeSystemActions(
     override fun openLockScreenSetup(): Boolean = true
     override fun openNotificationAccessSettings(): Boolean = true
     override fun openDefaultLauncherSettings(): Boolean = true
+    override fun openClock(): Boolean = true
+    override fun openCalendar(timeMillis: Long): Boolean = true
+    override fun openBatteryUsage(): Boolean = true
 }
 
 class FakeShortcutRepository(

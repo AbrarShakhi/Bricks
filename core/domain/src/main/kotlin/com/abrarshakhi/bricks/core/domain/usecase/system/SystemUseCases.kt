@@ -140,4 +140,10 @@ class SystemStatusUseCase(
     fun openNotificationAccessSettings(): Boolean = systemActions.openNotificationAccessSettings()
 
     fun openDefaultLauncherSettings(): Boolean = systemActions.openDefaultLauncherSettings()
+
+    fun openClock(): Boolean = systemActions.openClock()
+
+    fun openCalendar(timeMillis: Long): Boolean = systemActions.openCalendar(timeMillis)
+
+    fun openBatteryUsage(): Boolean = systemActions.openBatteryUsage()
 }

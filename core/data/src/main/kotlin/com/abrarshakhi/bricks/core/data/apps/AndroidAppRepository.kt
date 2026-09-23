@@ -3,12 +3,12 @@ package com.abrarshakhi.bricks.core.data.apps
 import android.os.Build
 import android.os.UserManager
 import androidx.datastore.core.DataStore
+import com.abrarshakhi.bricks.core.data.ApplicationScope
 import com.abrarshakhi.bricks.core.domain.model.App
 import com.abrarshakhi.bricks.core.domain.model.AppKey
 import com.abrarshakhi.bricks.core.domain.model.AppUsage
 import com.abrarshakhi.bricks.core.domain.model.UserProfile
 import com.abrarshakhi.bricks.core.domain.repository.AppRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +21,7 @@ internal class AndroidAppRepository(
     private val catalog: LauncherAppsCatalog,
     private val metadata: DataStore<AppMetadataDto>,
     private val userManager: UserManager,
-    appScope: CoroutineScope,
+    appScope: ApplicationScope,
 ) : AppRepository {
 
     override val apps: Flow<List<App>> = combine(catalog.apps, metadata.data) { installed, meta ->

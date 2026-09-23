@@ -9,7 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.UserHandle
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.CoroutineScope
+import com.abrarshakhi.bricks.core.data.ApplicationScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.shareIn
 internal class PackageChangeMonitor(
     private val context: Context,
     private val launcherApps: LauncherApps,
-    appScope: CoroutineScope,
+    appScope: ApplicationScope,
 ) {
     val changes: Flow<Unit> = callbackFlow {
         val callback = object : LauncherApps.Callback() {

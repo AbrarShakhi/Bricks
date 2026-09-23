@@ -49,8 +49,8 @@ val dataModule = module {
     single { androidContext().getSystemService(UserManager::class.java) }
     single { AppWidgetManager.getInstance(androidContext()) }
 
-    single { PackageChangeMonitor(androidContext(), get(), get<ApplicationScope>()) }
-    single { LauncherAppsCatalog(androidContext(), get(), get(), get(), get<ApplicationScope>()) }
+    single { PackageChangeMonitor(androidContext(), get(), get()) }
+    single { LauncherAppsCatalog(androidContext(), get(), get(), get(), get()) }
 
     single<SettingsRepository> {
         DataStoreSettingsRepository(
@@ -67,16 +67,16 @@ val dataModule = module {
             catalog = get(),
             metadata = androidContext().jsonDataStore(METADATA_FILE, AppMetadataDto.serializer(), AppMetadataDto()),
             userManager = get(),
-            appScope = get<ApplicationScope>(),
+            appScope = get(),
         )
     }
     single<AppLauncher> { AndroidAppLauncher(androidContext(), get(), get(), get()) }
     single<DefaultAppsProvider> { AndroidDefaultAppsProvider(androidContext(), get(), get()) }
     single<ShortcutRepository> { LauncherAppsShortcutRepository(get(), get()) }
     single<WidgetProviderRepository> {
-        AndroidWidgetProviderRepository(androidContext(), get(), get(), get(), get(), get<ApplicationScope>())
+        AndroidWidgetProviderRepository(androidContext(), get(), get(), get(), get(), get())
     }
-    single<DeviceStatusRepository> { AndroidDeviceStatusRepository(androidContext(), get<ApplicationScope>()) }
+    single<DeviceStatusRepository> { AndroidDeviceStatusRepository(androidContext(), get()) }
     single<NotificationBadgeRepository> { AndroidNotificationBadgeRepository(get()) }
     single<SystemActions> { AndroidSystemActions(androidContext(), get(), get()) }
 }

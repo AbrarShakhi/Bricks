@@ -17,4 +17,10 @@ interface SystemActions {
     fun openNotificationAccessSettings(): Boolean
 
     fun openDefaultLauncherSettings(): Boolean
+
+    fun openClock(): Boolean
+
+    fun openCalendar(timeMillis: Long): Boolean
+
+    fun openBatteryUsage(): Boolean
 }

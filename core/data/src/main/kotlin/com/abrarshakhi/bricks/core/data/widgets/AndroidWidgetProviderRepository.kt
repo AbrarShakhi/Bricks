@@ -8,12 +8,12 @@ import android.os.Build
 import android.os.Process
 import android.os.UserHandle
 import android.os.UserManager
+import com.abrarshakhi.bricks.core.data.ApplicationScope
 import com.abrarshakhi.bricks.core.data.apps.PackageChangeMonitor
 import com.abrarshakhi.bricks.core.domain.model.ProfileType
 import com.abrarshakhi.bricks.core.domain.model.WidgetProvider
 import com.abrarshakhi.bricks.core.domain.model.WidgetProviderKey
 import com.abrarshakhi.bricks.core.domain.repository.WidgetProviderRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,7 +32,7 @@ internal class AndroidWidgetProviderRepository(
     private val launcherApps: LauncherApps,
     private val userManager: UserManager,
     monitor: PackageChangeMonitor,
-    appScope: CoroutineScope,
+    appScope: ApplicationScope,
 ) : WidgetProviderRepository {
 
     override val providers: Flow<List<WidgetProvider>> = monitor.changes

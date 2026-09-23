@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.provider.AlarmClock
+import android.provider.CalendarContract
 import android.provider.Settings
 import com.abrarshakhi.bricks.core.data.badges.BadgeListenerService
 import com.abrarshakhi.bricks.core.domain.gateway.SystemActions
@@ -78,6 +80,22 @@ internal class AndroidSystemActions(
         }
         return activityTracker.start(context, Intent(Settings.ACTION_HOME_SETTINGS))
     }
+
+    override fun openClock(): Boolean =
+        activityTracker.start(context, Intent(AlarmClock.ACTION_SHOW_ALARMS))
+
+    override fun openCalendar(timeMillis: Long): Boolean {
+        val uri = CalendarContract.CONTENT_URI.buildUpon()
+            .appendPath("time")
+            .appendPath(timeMillis.toString())
+            .build()
+        return activityTracker.start(context, Intent(Intent.ACTION_VIEW, uri)) ||
+            activityTracker.start(context, Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_CALENDAR))
+    }
+
+    override fun openBatteryUsage(): Boolean =
+        activityTracker.start(context, Intent(Intent.ACTION_POWER_USAGE_SUMMARY)) ||
+            activityTracker.start(context, Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS))
 
     @SuppressLint("WrongConstant")
     private fun invokeStatusBar(method: String): Boolean = runCatching {

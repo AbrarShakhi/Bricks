@@ -7,10 +7,10 @@ import android.os.Build
 import android.os.Process
 import android.os.UserHandle
 import android.os.UserManager
+import com.abrarshakhi.bricks.core.data.ApplicationScope
 import com.abrarshakhi.bricks.core.domain.model.AppKey
 import com.abrarshakhi.bricks.core.domain.model.ProfileType
 import com.abrarshakhi.bricks.core.domain.model.UserProfile
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,7 +35,7 @@ internal class LauncherAppsCatalog(
     private val launcherApps: LauncherApps,
     private val userManager: UserManager,
     monitor: PackageChangeMonitor,
-    appScope: CoroutineScope,
+    appScope: ApplicationScope,
 ) {
     val apps: Flow<List<InstalledApp>> = monitor.changes
         .onStart { emit(Unit) }

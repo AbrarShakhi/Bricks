@@ -10,9 +10,12 @@ import com.abrarshakhi.bricks.core.domain.model.HomeLayout
 import com.abrarshakhi.bricks.core.domain.model.HomeSettings
 import com.abrarshakhi.bricks.core.domain.model.Placement
 import com.abrarshakhi.bricks.core.domain.model.ShortcutKey
+import com.abrarshakhi.bricks.core.domain.model.WidgetProvider
 import com.abrarshakhi.bricks.core.domain.model.WidgetProviderKey
 import com.abrarshakhi.bricks.core.domain.repository.HomeLayoutRepository
 import com.abrarshakhi.bricks.core.domain.repository.SettingsRepository
+import com.abrarshakhi.bricks.core.domain.repository.ShortcutRepository
+import com.abrarshakhi.bricks.core.domain.repository.WidgetProviderRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -67,8 +70,10 @@ class AddAppToDockUseCase(
 class PinShortcutToHomeUseCase(
     private val repository: HomeLayoutRepository,
     private val settingsRepository: SettingsRepository,
+    private val shortcutRepository: ShortcutRepository,
 ) {
-    suspend operator fun invoke(shortcut: ShortcutKey, label: String, preferredPage: Int) {
+    suspend operator fun invoke(shortcut: ShortcutKey, label: String, preferredPage: Int, alreadyPinned: Boolean = false) {
+        if (!alreadyPinned) shortcutRepository.pin(shortcut)
         val grid = settingsRepository.homeSettings().gridOrDefault()
         repository.update { layout ->
             HomeLayoutEditor.addToDesktop(layout, grid, GridSpan.Single, preferredPage) { id, placement ->
@@ -76,6 +81,12 @@ class PinShortcutToHomeUseCase(
             }
         }
     }
+}
+
+class FindWidgetProviderUseCase(
+    private val repository: WidgetProviderRepository,
+) {
+    suspend operator fun invoke(key: WidgetProviderKey): WidgetProvider? = repository.find(key)
 }
 
 class AddWidgetToHomeUseCase(
@@ -156,16 +167,23 @@ class MoveHomeItemUseCase(
 
 class RemoveHomeItemUseCase(
     private val repository: HomeLayoutRepository,
+    private val shortcutRepository: ShortcutRepository,
 ) {
     suspend operator fun invoke(itemId: Long): Set<Int> {
         var released = emptySet<Int>()
+        var unpinned = emptySet<ShortcutKey>()
         repository.update { layout ->
             val updated = HomeLayoutEditor.remove(layout, itemId)
             released = HomeLayoutEditor.widgetIds(layout) - HomeLayoutEditor.widgetIds(updated)
+            unpinned = layout.shortcutKeys() - updated.shortcutKeys()
             updated
         }
+        unpinned.forEach { shortcutRepository.unpin(it) }
         return released
     }
+
+    private fun HomeLayout.shortcutKeys(): Set<ShortcutKey> =
+        items.filterIsInstance<HomeItem.Shortcut>().map { it.shortcut }.toSet()
 }
 
 class RenameFolderUseCase(

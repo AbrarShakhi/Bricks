@@ -177,7 +177,7 @@ class UseCaseTest {
             items = listOf(HomeItem.Widget(5, Placement.Desktop(0, GridCell(0, 0)), 77, WidgetProviderKey("p", "c", 0))),
         )
         val home = FakeHomeLayoutRepository(initial)
-        assertEquals(setOf(77), RemoveHomeItemUseCase(home)(5))
+        assertEquals(setOf(77), RemoveHomeItemUseCase(home, FakeShortcutRepository(emptyList()))(5))
         assertTrue(home.state.value.items.isEmpty())
     }
 
