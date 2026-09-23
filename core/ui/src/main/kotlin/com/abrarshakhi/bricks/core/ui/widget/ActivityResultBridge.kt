@@ -1,25 +1,20 @@
 package com.abrarshakhi.bricks.core.ui.widget
 
-import kotlinx.coroutines.CompletableDeferred
-import java.util.concurrent.ConcurrentHashMap
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
+data class ActivityResultEvent(
+    val requestCode: Int,
+    val resultCode: Int,
+)
 
 class ActivityResultBridge {
-    private val pending = ConcurrentHashMap<Int, CompletableDeferred<Int>>()
+    private val events = MutableSharedFlow<ActivityResultEvent>(extraBufferCapacity = 8)
 
-    suspend fun await(requestCode: Int, launch: () -> Boolean): Int? {
-        val deferred = CompletableDeferred<Int>()
-        pending.put(requestCode, deferred)?.cancel()
-        if (!launch()) {
-            pending.remove(requestCode, deferred)
-            return null
-        }
-        return try {
-            deferred.await()
-        } finally {
-            pending.remove(requestCode, deferred)
-        }
+    val results: SharedFlow<ActivityResultEvent> = events.asSharedFlow()
+
+    fun dispatch(requestCode: Int, resultCode: Int) {
+        events.tryEmit(ActivityResultEvent(requestCode, resultCode))
     }
-
-    fun dispatch(requestCode: Int, resultCode: Int): Boolean =
-        pending.remove(requestCode)?.complete(resultCode) ?: false
 }

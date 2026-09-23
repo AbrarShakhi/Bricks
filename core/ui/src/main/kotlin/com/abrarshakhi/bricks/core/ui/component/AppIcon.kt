@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.abrarshakhi.bricks.core.designsystem.component.halftone
 import com.abrarshakhi.bricks.core.designsystem.component.rememberWallpaperTextStyle
 import com.abrarshakhi.bricks.core.designsystem.icon.BricksIcons
 import com.abrarshakhi.bricks.core.domain.model.IconStyle
@@ -40,7 +41,6 @@ import com.abrarshakhi.paperui.PuiBadgedBox
 import com.abrarshakhi.paperui.PuiIcon
 import com.abrarshakhi.paperui.PuiText
 import com.abrarshakhi.paperui.PuiTheme
-import com.abrarshakhi.paperui.puiHalftone
 import com.abrarshakhi.paperui.puiHardShadow
 
 val AppIconShape: Shape = RoundedCornerShape(percent = 24)
@@ -81,8 +81,15 @@ fun AppIconTile(
     modifier: Modifier = Modifier,
     pressed: Boolean = false,
     dimmed: Boolean = false,
+    grayscale: Boolean = false,
 ) {
-    val dimFilter = remember(dimmed) { if (dimmed) grayscaleFilter(contrast = 1f) else null }
+    val dimFilter = remember(dimmed, grayscale) {
+        when {
+            grayscale -> InkFilter
+            dimmed -> grayscaleFilter(contrast = 1f)
+            else -> null
+        }
+    }
     if (style == IconStyle.Classic) {
         val scale by animateFloatAsState(
             targetValue = if (pressed) 0.88f else 1f,
@@ -208,7 +215,7 @@ private fun IconPlaceholder(modifier: Modifier) {
     Box(
         modifier = modifier
             .background(PuiTheme.colors.surfaceMuted)
-            .puiHalftone(color = PuiTheme.colors.ink, dotRadius = 1.dp, spacing = 5.dp, alpha = 0.2f),
+            .halftone(color = PuiTheme.colors.ink, dotRadius = 1.dp, spacing = 5.dp, alpha = 0.2f),
     )
 }
 

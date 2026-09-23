@@ -46,6 +46,13 @@ class DragDropController {
     val isDragging: Boolean
         get() = session != null
 
+    var dropHandler: ((DragDrop) -> Unit)? = null
+
+    fun drop() {
+        val drop = finish() ?: return
+        dropHandler?.invoke(drop)
+    }
+
     fun start(
         payload: DragPayload,
         rootPosition: Offset,
@@ -66,7 +73,7 @@ class DragDropController {
         val position = pointer
         session = null
         pointer = Offset.Unspecified
-        return DragDrop(active.payload, position)
+        return DragDrop(active.payload, position, active.grabOffset)
     }
 
     fun cancel() {
@@ -78,6 +85,7 @@ class DragDropController {
 data class DragDrop(
     val payload: DragPayload,
     val rootPosition: Offset,
+    val grabOffset: Offset,
 )
 
 val LocalDragDropController = staticCompositionLocalOf { DragDropController() }
@@ -86,29 +94,36 @@ val LocalDragDropController = staticCompositionLocalOf { DragDropController() }
 fun DragGhostLayer(controller: DragDropController, modifier: Modifier = Modifier) {
     val layer = remember { LayerOrigin() }
     Box(modifier = modifier.onGloballyPositioned { layer.coordinates = it }) {
-        val session = controller.session ?: return@Box
-        val lift = remember(session) { Animatable(0f) }
-        LaunchedEffect(session) {
-            lift.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
+        val session = controller.session
+        if (session != null) {
+            Ghost(controller, session, layer)
         }
-        Box(
-            modifier = Modifier
-                .size(session.ghostSize)
-                .graphicsLayer {
-                    val position = controller.pointer
-                    val origin = layer.coordinates?.takeIf { it.isAttached }?.rootToLocal(position) ?: position
-                    if (position != Offset.Unspecified) {
-                        translationX = origin.x - session.grabOffset.x
-                        translationY = origin.y - session.grabOffset.y
-                    }
-                    val progress = lift.value
-                    scaleX = 1f + GHOST_SCALE * progress
-                    scaleY = 1f + GHOST_SCALE * progress
-                    rotationZ = GHOST_TILT * progress
-                },
-        ) {
-            session.ghost()
-        }
+    }
+}
+
+@Composable
+private fun Ghost(controller: DragDropController, session: DragSession, layer: LayerOrigin) {
+    val lift = remember(session) { Animatable(0f) }
+    LaunchedEffect(session) {
+        lift.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
+    }
+    Box(
+        modifier = Modifier
+            .size(session.ghostSize)
+            .graphicsLayer {
+                val position = controller.pointer
+                val origin = layer.coordinates?.takeIf { it.isAttached }?.rootToLocal(position) ?: position
+                if (position != Offset.Unspecified) {
+                    translationX = origin.x - session.grabOffset.x
+                    translationY = origin.y - session.grabOffset.y
+                }
+                val progress = lift.value
+                scaleX = 1f + GHOST_SCALE * progress
+                scaleY = 1f + GHOST_SCALE * progress
+                rotationZ = GHOST_TILT * progress
+            },
+    ) {
+        session.ghost()
     }
 }
 

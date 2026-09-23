@@ -33,34 +33,44 @@ fun AppWidget(
     key(appWidgetId) {
         val host = koinInject<LauncherWidgetHost>()
         val available = remember { host.info(appWidgetId) != null }
-        val latestLongPress by rememberUpdatedState(onLongPress)
-        val density = LocalDensity.current
-        val reference = remember { WidgetViewReference() }
-        if (!available) {
+        if (available) {
+            HostedWidget(host, appWidgetId, modifier, onLongPress)
+        } else {
             WidgetUnavailable(modifier)
-            return@key
         }
-        AndroidView(
-            factory = { context ->
-                host.createView(context, appWidgetId)
-                    ?.also { view ->
-                        view.onLongPress = { latestLongPress() }
-                        reference.view = view
-                    }
-                    ?: FrameLayout(context)
-            },
-            modifier = modifier.onSizeChanged { size ->
-                with(density) {
-                    reference.view?.updateSizeDp(size.width.toDp().value, size.height.toDp().value)
-                }
-            },
-            update = { view -> (view as? LauncherWidgetHostView)?.onLongPress = { latestLongPress() } },
-            onRelease = { view ->
-                (view as? LauncherWidgetHostView)?.onLongPress = null
-                reference.view = null
-            },
-        )
     }
+}
+
+@Composable
+private fun HostedWidget(
+    host: LauncherWidgetHost,
+    appWidgetId: Int,
+    modifier: Modifier,
+    onLongPress: () -> Unit,
+) {
+    val latestLongPress by rememberUpdatedState(onLongPress)
+    val density = LocalDensity.current
+    val reference = remember { WidgetViewReference() }
+    AndroidView(
+        factory = { context ->
+            host.createView(context, appWidgetId)
+                ?.also { view ->
+                    view.onLongPress = { latestLongPress() }
+                    reference.view = view
+                }
+                ?: FrameLayout(context)
+        },
+        modifier = modifier.onSizeChanged { size ->
+            with(density) {
+                reference.view?.updateSizeDp(size.width.toDp().value, size.height.toDp().value)
+            }
+        },
+        update = { view -> (view as? LauncherWidgetHostView)?.onLongPress = { latestLongPress() } },
+        onRelease = { view ->
+            (view as? LauncherWidgetHostView)?.onLongPress = null
+            reference.view = null
+        },
+    )
 }
 
 private class WidgetViewReference {
