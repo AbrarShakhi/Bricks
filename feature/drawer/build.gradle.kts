@@ -27,6 +27,7 @@ android {
 dependencies {
     implementation(project(":core:ui"))
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.koin.bom))

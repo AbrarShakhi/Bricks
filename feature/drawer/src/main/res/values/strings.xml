@@ -1,0 +1,37 @@
+<resources>
+    <string name="drawer_search_hint">Search apps, math or the web</string>
+    <string name="drawer_search_clear">Clear search</string>
+    <string name="drawer_options">Drawer options</string>
+    <string name="drawer_sort_alphabetical">Sort A to Z</string>
+    <string name="drawer_sort_most_used">Most used first</string>
+    <string name="drawer_sort_recent">Newest first</string>
+    <string name="drawer_hidden_apps">Hidden apps</string>
+    <string name="drawer_settings">Launcher settings</string>
+    <string name="drawer_suggested">Suggested</string>
+    <string name="drawer_profile_personal">Personal</string>
+    <string name="drawer_profile_work">Work</string>
+    <string name="drawer_profile_private">Private</string>
+    <string name="drawer_work_apps">Work apps</string>
+    <string name="drawer_work_active">On — notifications and apps are available</string>
+    <string name="drawer_work_paused">Paused — tap to turn back on</string>
+    <string name="drawer_empty_title">Nothing here yet</string>
+    <string name="drawer_empty_message">Apps you install will show up in this drawer.</string>
+    <string name="drawer_no_results_title">No apps match</string>
+    <string name="drawer_no_results_message">Nothing installed matches “%1$s”. Try the web instead.</string>
+    <string name="drawer_search_web">Search the web for “%1$s”</string>
+    <string name="drawer_search_store">Find “%1$s” in the store</string>
+    <string name="drawer_copy_result">Copy result</string>
+    <string name="drawer_clip_label">Bricks calculation</string>
+    <string name="drawer_a11y_index">Alphabet index, drag to jump</string>
+    <string name="drawer_msg_launch_failed">Couldn\'t open that app</string>
+    <string name="drawer_msg_added_home">Added to your home screen</string>
+    <string name="drawer_msg_added_dock">Added to the dock</string>
+    <string name="drawer_msg_dock_full">The dock is full</string>
+    <string name="drawer_msg_hidden">App hidden. Find it in Settings, Hidden apps.</string>
+    <string name="drawer_msg_cannot_uninstall">System apps can\'t be uninstalled</string>
+    <string name="drawer_msg_copied">Result copied</string>
+    <plurals name="drawer_results">
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
+</resources>
