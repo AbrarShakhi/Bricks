@@ -1,4 +1,4 @@
-package com.abrarshakhi.bricks.core.domain.usecase
+package com.abrarshakhi.bricks.core.domain.testing
 
 import com.abrarshakhi.bricks.core.domain.gateway.AppLauncher
 import com.abrarshakhi.bricks.core.domain.gateway.DefaultAppsProvider
@@ -9,14 +9,19 @@ import com.abrarshakhi.bricks.core.domain.model.AppShortcut
 import com.abrarshakhi.bricks.core.domain.model.AppUsage
 import com.abrarshakhi.bricks.core.domain.model.HomeLayout
 import com.abrarshakhi.bricks.core.domain.model.LauncherSettings
+import com.abrarshakhi.bricks.core.domain.model.PackageUserKey
 import com.abrarshakhi.bricks.core.domain.model.ProfileType
 import com.abrarshakhi.bricks.core.domain.model.ScreenBounds
 import com.abrarshakhi.bricks.core.domain.model.ShortcutKey
 import com.abrarshakhi.bricks.core.domain.model.UserProfile
+import com.abrarshakhi.bricks.core.domain.model.WidgetProvider
+import com.abrarshakhi.bricks.core.domain.model.WidgetProviderKey
 import com.abrarshakhi.bricks.core.domain.repository.AppRepository
 import com.abrarshakhi.bricks.core.domain.repository.HomeLayoutRepository
+import com.abrarshakhi.bricks.core.domain.repository.NotificationBadgeRepository
 import com.abrarshakhi.bricks.core.domain.repository.SettingsRepository
 import com.abrarshakhi.bricks.core.domain.repository.ShortcutRepository
+import com.abrarshakhi.bricks.core.domain.repository.WidgetProviderRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -110,6 +115,8 @@ class FakeSystemActions(
     override var isDefaultLauncher: Boolean = true,
 ) : SystemActions {
     var locked = false
+    val opened = mutableListOf<SystemScreen>()
+
     override fun expandNotifications(): Boolean = true
     override fun expandQuickSettings(): Boolean = true
     override fun lockScreen(): Boolean {
@@ -117,24 +124,39 @@ class FakeSystemActions(
         return true
     }
 
-    override fun openWallpaperPicker(): Boolean = true
-    override fun openLockScreenSetup(): Boolean = true
-    override fun openNotificationAccessSettings(): Boolean = true
-    override fun openDefaultLauncherSettings(): Boolean = true
-    override fun openClock(): Boolean = true
-    override fun openCalendar(timeMillis: Long): Boolean = true
-    override fun openBatteryUsage(): Boolean = true
+    override fun openWallpaperPicker(): Boolean = open(SystemScreen.WallpaperPicker)
+    override fun openLockScreenSetup(): Boolean = open(SystemScreen.LockScreenSetup)
+    override fun openNotificationAccessSettings(): Boolean = open(SystemScreen.NotificationAccess)
+    override fun openDefaultLauncherSettings(): Boolean = open(SystemScreen.DefaultLauncher)
+    override fun openClock(): Boolean = open(SystemScreen.Clock)
+    override fun openCalendar(timeMillis: Long): Boolean = open(SystemScreen.Calendar)
+    override fun openBatteryUsage(): Boolean = open(SystemScreen.BatteryUsage)
+
+    private fun open(screen: SystemScreen): Boolean {
+        opened += screen
+        return true
+    }
 }
 
+enum class SystemScreen { WallpaperPicker, LockScreenSetup, NotificationAccess, DefaultLauncher, Clock, Calendar, BatteryUsage }
+
 class FakeShortcutRepository(
-    private val shortcuts: List<AppShortcut>,
+    private val shortcuts: List<AppShortcut> = emptyList(),
     override val isAvailable: Boolean = true,
 ) : ShortcutRepository {
+    val pinned = mutableListOf<ShortcutKey>()
+    val unpinned = mutableListOf<ShortcutKey>()
+
     override suspend fun shortcutsFor(app: AppKey): List<AppShortcut> = shortcuts
     override suspend fun pinnedShortcuts(keys: Set<ShortcutKey>): List<AppShortcut> = emptyList()
     override fun launch(shortcut: ShortcutKey, bounds: ScreenBounds?): Boolean = true
-    override suspend fun pin(shortcut: ShortcutKey) = Unit
-    override suspend fun unpin(shortcut: ShortcutKey) = Unit
+    override suspend fun pin(shortcut: ShortcutKey) {
+        pinned += shortcut
+    }
+
+    override suspend fun unpin(shortcut: ShortcutKey) {
+        unpinned += shortcut
+    }
 }
 
 class FakeDefaultAppsProvider(
@@ -144,3 +166,49 @@ class FakeDefaultAppsProvider(
     override suspend fun dockApps(): List<AppKey> = dock
     override suspend fun homeApps(): List<AppKey> = home
 }
+
+class FakeNotificationBadgeRepository(
+    badges: Map<PackageUserKey, Int> = emptyMap(),
+    accessGranted: Boolean = false,
+) : NotificationBadgeRepository {
+    val badgesState = MutableStateFlow(badges)
+    val accessState = MutableStateFlow(accessGranted)
+
+    override val badges: Flow<Map<PackageUserKey, Int>> = badgesState
+    override val isAccessGranted: Flow<Boolean> = accessState
+}
+
+class FakeWidgetProviderRepository(
+    providers: List<WidgetProvider> = emptyList(),
+) : WidgetProviderRepository {
+    val providersState = MutableStateFlow(providers)
+
+    override val providers: Flow<List<WidgetProvider>> = providersState
+
+    override suspend fun find(key: WidgetProviderKey): WidgetProvider? = providersState.value.firstOrNull { it.key == key }
+}
+
+fun testWidgetProvider(
+    name: String,
+    minWidthDp: Int = 110,
+    minHeightDp: Int = 110,
+    configurable: Boolean = false,
+) = WidgetProvider(
+    key = WidgetProviderKey("pkg.$name", "$name.Widget", 0L),
+    label = name.replaceFirstChar { it.uppercase() },
+    appLabel = name.replaceFirstChar { it.uppercase() },
+    description = null,
+    profile = ProfileType.Personal,
+    minWidthDp = minWidthDp,
+    minHeightDp = minHeightDp,
+    minResizeWidthDp = 0,
+    minResizeHeightDp = 0,
+    maxResizeWidthDp = null,
+    maxResizeHeightDp = null,
+    targetCellWidth = null,
+    targetCellHeight = null,
+    resizeHorizontal = true,
+    resizeVertical = true,
+    isConfigurable = configurable,
+)
+

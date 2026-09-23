@@ -14,6 +14,15 @@ import com.abrarshakhi.bricks.core.domain.model.HomeSettings
 import com.abrarshakhi.bricks.core.domain.model.LauncherSettings
 import com.abrarshakhi.bricks.core.domain.model.Placement
 import com.abrarshakhi.bricks.core.domain.model.ShortcutKey
+import com.abrarshakhi.bricks.core.domain.model.WidgetProviderKey
+import com.abrarshakhi.bricks.core.domain.testing.FakeAppLauncher
+import com.abrarshakhi.bricks.core.domain.testing.FakeAppRepository
+import com.abrarshakhi.bricks.core.domain.testing.FakeDefaultAppsProvider
+import com.abrarshakhi.bricks.core.domain.testing.FakeHomeLayoutRepository
+import com.abrarshakhi.bricks.core.domain.testing.FakeSettingsRepository
+import com.abrarshakhi.bricks.core.domain.testing.FakeShortcutRepository
+import com.abrarshakhi.bricks.core.domain.testing.FakeSystemActions
+import com.abrarshakhi.bricks.core.domain.testing.testApp
 import com.abrarshakhi.bricks.core.domain.usecase.apps.LaunchAppUseCase
 import com.abrarshakhi.bricks.core.domain.usecase.apps.ObserveVisibleAppsUseCase
 import com.abrarshakhi.bricks.core.domain.usecase.apps.RenameAppUseCase
@@ -26,7 +35,6 @@ import com.abrarshakhi.bricks.core.domain.usecase.settings.EnsureHomeGridUseCase
 import com.abrarshakhi.bricks.core.domain.usecase.system.GestureOutcome
 import com.abrarshakhi.bricks.core.domain.usecase.system.GetAppShortcutsUseCase
 import com.abrarshakhi.bricks.core.domain.usecase.system.PerformGestureUseCase
-import com.abrarshakhi.bricks.core.domain.model.WidgetProviderKey
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
