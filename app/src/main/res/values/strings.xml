@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Bricks</string>
+    <string name="app_pick_section_title">Pick a section</string>
+    <string name="app_pick_section_message">Choose something from the list to tune it here.</string>
 </resources>
