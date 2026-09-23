@@ -14,6 +14,7 @@ import com.abrarshakhi.bricks.core.domain.model.Placement
 import com.abrarshakhi.bricks.core.domain.model.ProfileType
 import com.abrarshakhi.bricks.core.domain.usecase.system.GestureOutcome
 import com.abrarshakhi.bricks.core.ui.mvi.MviViewModel
+import com.abrarshakhi.bricks.core.ui.util.HomeGridMetrics
 import com.abrarshakhi.bricks.core.ui.widget.LauncherWidgetHost
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
@@ -25,6 +26,7 @@ class HomeViewModel(
     private val layoutActions: HomeLayoutActions,
     private val system: HomeSystemActions,
     private val widgetHost: LauncherWidgetHost,
+    private val gridMetrics: HomeGridMetrics,
 ) : MviViewModel<HomeState, HomeIntent, HomeEffect>(HomeState()) {
 
     private var menuJob: Job? = null
@@ -167,6 +169,7 @@ class HomeViewModel(
             HomeIntent.DismissDefaultPrompt -> reduce { copy(defaultPromptDismissed = true) }
             is HomeIntent.CellSizeChanged -> if (intent.widthDp > 0f && intent.heightDp > 0f) {
                 cellSizeDp = intent.widthDp to intent.heightDp
+                gridMetrics.update(currentState.grid, intent.landscape, intent.widthDp, intent.heightDp)
             }
             HomeIntent.OpenLockScreenSetup -> system.status.openLockScreenSetup()
         }

@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.abrarshakhi.bricks.core.ui.mvi.CollectEffects
+import com.abrarshakhi.bricks.core.ui.util.HomeGridMetrics
 import com.abrarshakhi.bricks.core.ui.util.findActivity
 import com.abrarshakhi.bricks.core.ui.widget.ActivityResultBridge
 import com.abrarshakhi.bricks.core.ui.widget.LauncherWidgetHost
@@ -37,10 +38,8 @@ fun WidgetsRoute(
     val bridge = koinInject<ActivityResultBridge>()
     val snackbar = remember { PuiSnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val shortSide = minOf(configuration.screenWidthDp, configuration.screenHeightDp).toFloat()
-    val longSide = maxOf(configuration.screenWidthDp, configuration.screenHeightDp).toFloat()
-    val cellWidth = (shortSide - HORIZONTAL_PADDING_DP) / state.grid.columns
-    val cellHeight = longSide * GRID_HEIGHT_FRACTION / state.grid.rows
+    val gridMetrics = koinInject<HomeGridMetrics>()
+    val cell = gridMetrics.cellSize(state.grid, configuration.screenWidthDp, configuration.screenHeightDp)
     val bindLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         viewModel.onIntent(WidgetsIntent.BindResult(result.resultCode == Activity.RESULT_OK))
     }
@@ -63,8 +62,8 @@ fun WidgetsRoute(
         state = state,
         onIntent = viewModel::onIntent,
         onBack = onBack,
-        cellWidthDp = cellWidth,
-        cellHeightDp = cellHeight,
+        cellWidthDp = cell.widthDp,
+        cellHeightDp = cell.heightDp,
         snackbar = snackbar,
     )
 }
@@ -75,6 +74,3 @@ private fun Context.messageText(message: WidgetsMessage): String = getString(
         WidgetsMessage.Cancelled -> R.string.widgets_msg_cancelled
     },
 )
-
-private const val HORIZONTAL_PADDING_DP = 24f
-private const val GRID_HEIGHT_FRACTION = 0.62f

@@ -198,7 +198,7 @@ sealed interface HomeIntent {
     data object OpenBattery : HomeIntent
     data object SetAsDefaultLauncher : HomeIntent
     data object DismissDefaultPrompt : HomeIntent
-    data class CellSizeChanged(val widthDp: Float, val heightDp: Float) : HomeIntent
+    data class CellSizeChanged(val widthDp: Float, val heightDp: Float, val landscape: Boolean) : HomeIntent
     data object OpenLockScreenSetup : HomeIntent
 }
 

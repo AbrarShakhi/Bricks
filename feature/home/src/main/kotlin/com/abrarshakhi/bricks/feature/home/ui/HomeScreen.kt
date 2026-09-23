@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -437,8 +438,10 @@ private fun BoxWithConstraintsScope.PagerContent(
         iconScale = state.appearance.iconScale,
         labelsEnabled = state.home.showLabels,
     )
-    LaunchedEffect(spec.cellWidth, spec.cellHeight) {
-        onIntent(HomeIntent.CellSizeChanged(spec.cellWidth.value, spec.cellHeight.value))
+    val configuration = LocalConfiguration.current
+    val landscape = configuration.screenWidthDp > configuration.screenHeightDp
+    LaunchedEffect(spec.cellWidth, spec.cellHeight, landscape) {
+        onIntent(HomeIntent.CellSizeChanged(spec.cellWidth.value, spec.cellHeight.value, landscape))
     }
     HorizontalPager(
         state = pagerState,

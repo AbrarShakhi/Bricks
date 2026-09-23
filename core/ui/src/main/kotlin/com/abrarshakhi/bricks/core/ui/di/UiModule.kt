@@ -2,6 +2,7 @@ package com.abrarshakhi.bricks.core.ui.di
 
 import com.abrarshakhi.bricks.core.ui.icon.AppIconLoader
 import com.abrarshakhi.bricks.core.ui.util.HomeButtonEvents
+import com.abrarshakhi.bricks.core.ui.util.HomeGridMetrics
 import com.abrarshakhi.bricks.core.ui.widget.ActivityResultBridge
 import com.abrarshakhi.bricks.core.ui.widget.LauncherWidgetHost
 import com.abrarshakhi.bricks.core.ui.widget.WidgetPreviewLoader
@@ -14,4 +15,5 @@ val uiModule = module {
     single { WidgetPreviewLoader(androidContext(), get()) }
     single { ActivityResultBridge() }
     single { HomeButtonEvents() }
+    single { HomeGridMetrics() }
 }
