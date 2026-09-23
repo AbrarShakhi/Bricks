@@ -44,17 +44,17 @@ internal class AndroidWidgetProviderRepository(
         .shareIn(appScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), replay = 1)
 
     override suspend fun find(key: WidgetProviderKey): WidgetProvider? = withContext(Dispatchers.IO) {
-        load().firstOrNull { it.key == key }
+        load(includeHidden = true).firstOrNull { it.key == key }
     }
 
-    private fun load(): List<WidgetProvider> {
+    private fun load(includeHidden: Boolean = false): List<WidgetProvider> {
         val density = context.resources.displayMetrics.density
         return userManager.userProfiles.flatMap { user ->
             val serial = userManager.getSerialNumberForUser(user)
             val profile = if (user == Process.myUserHandle()) ProfileType.Personal else ProfileType.Work
             runCatching { appWidgetManager.getInstalledProvidersForProfile(user) }
                 .getOrDefault(emptyList())
-                .filterNot { it.isHiddenFromPicker() }
+                .filter { includeHidden || !it.isHiddenFromPicker() }
                 .mapNotNull { info -> runCatching { info.toDomain(serial, profile, density, user) }.getOrNull() }
         }
     }

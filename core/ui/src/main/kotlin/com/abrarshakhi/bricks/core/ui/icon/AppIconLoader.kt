@@ -108,6 +108,13 @@ class AppIconLoader(
         }
     }
 
+    suspend fun loadExternal(sizePx: Int, style: IconStyle, source: (densityDpi: Int) -> Drawable?): LoadedIcon? =
+        permits.withPermit {
+            withContext(Dispatchers.IO) {
+                runCatching { source(iconDensityFor(sizePx)) }.getOrNull()?.let { render(it, sizePx, style) }
+            }
+        }
+
     fun clear() {
         cache.evictAll()
         generation.update { it + 1 }

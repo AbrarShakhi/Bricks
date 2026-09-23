@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.abrarshakhi.bricks.di.appModules
+import com.abrarshakhi.bricks.feature.home.pin.PinItemRequestHandle
 import org.junit.Test
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.dsl.module
@@ -21,6 +22,7 @@ class KoinGraphTest {
                 Application::class,
                 SavedStateHandle::class,
                 CreationExtras::class,
+                PinItemRequestHandle::class,
             ),
         )
     }
